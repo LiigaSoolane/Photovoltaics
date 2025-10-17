@@ -83,7 +83,7 @@ def ex1():
         d_candidate = popt[0]
 
         # Compute residuals
-        residuals = y_data - model(x_data, m_candidate, d_candidate)
+        residuals = index - model_d(index, d_candidate)
         error = np.sum(residuals**2)
 
         if error < best_error:
