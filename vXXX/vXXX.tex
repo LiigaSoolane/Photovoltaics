@@ -9,14 +9,23 @@
   Abgabe: DATUM
 }
 
+\newcommand*{\getUniversity}{Technical University of Munich}
+\newcommand*{\getDepartment}{Department of Physics}
+\newcommand*{\getTitle}{Photovoltaics}
+\newcommand*{\getAuthorI}{Amith}
+\newcommand*{\getAuthorII}{Mimo Prayer 03788448}
+\newcommand*{\getDoctype}{Advanced Lab Course \\ Written Experiment Report}
+\newcommand*{\getExperimentDate}{October 10, 2025}
+\newcommand*{\getSubmissionDate}{\today}
+
 \begin{document}
 
-\maketitle
+\input{content/0_title.tex}
 \thispagestyle{empty}
 \tableofcontents
 \newpage
 
-\input{content/theorie.tex}
+
 \input{content/durchfuehrung.tex}
 \input{content/auswertung.tex}
 \input{content/diskussion.tex}

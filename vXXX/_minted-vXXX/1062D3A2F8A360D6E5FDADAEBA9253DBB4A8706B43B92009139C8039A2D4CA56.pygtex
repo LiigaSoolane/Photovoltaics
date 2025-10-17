@@ -1,0 +1,51 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{k+kn}{import} \PYG{n+nn}{matplotlib.pyplot} \PYG{k}{as} \PYG{n+nn}{plt}
+\PYG{k+kn}{import} \PYG{n+nn}{numpy} \PYG{k}{as} \PYG{n+nn}{np}
+\PYG{k+kn}{import} \PYG{n+nn}{pandas} \PYG{k}{as} \PYG{n+nn}{pd}
+\PYG{k+kn}{import} \PYG{n+nn}{matplotlib} \PYG{k}{as} \PYG{n+nn}{mpl}
+
+
+\PYG{n}{mpl}\PYG{o}{.}\PYG{n}{rcParams}\PYG{o}{.}\PYG{n}{update}\PYG{p}{(\PYGZob{}}
+    \PYG{l+s+s2}{\PYGZdq{}text.usetex\PYGZdq{}}\PYG{p}{:} \PYG{k+kc}{True}\PYG{p}{,}
+    \PYG{l+s+s2}{\PYGZdq{}pgf.texsystem\PYGZdq{}}\PYG{p}{:} \PYG{l+s+s2}{\PYGZdq{}lualatex\PYGZdq{}}\PYG{p}{,}  \PYG{c+c1}{\PYGZsh{} zwingt lualatex}
+    \PYG{l+s+s2}{\PYGZdq{}pgf.preamble\PYGZdq{}}\PYG{p}{:} \PYG{l+s+sa}{r}\PYG{l+s+s2}{\PYGZdq{}\PYGZbs{}usepackage}\PYG{l+s+si}{\PYGZob{}siunitx\PYGZcb{}}\PYG{l+s+s2}{\PYGZdq{}}
+\PYG{p}{\PYGZcb{})}
+
+\PYG{n}{df} \PYG{o}{=} \PYG{n}{pd}\PYG{o}{.}\PYG{n}{read\PYGZus{}csv}\PYG{p}{(}\PYG{l+s+s2}{\PYGZdq{}data/Reflection.csv\PYGZdq{}}\PYG{p}{)}
+\PYG{n+nb}{print}\PYG{p}{(}\PYG{n}{df}\PYG{o}{.}\PYG{n}{columns}\PYG{p}{)}
+\PYG{n}{num\PYGZus{}cols} \PYG{o}{=} \PYG{n}{df}\PYG{o}{.}\PYG{n}{shape}\PYG{p}{[}\PYG{l+m+mi}{1}\PYG{p}{]}
+
+\PYG{c+c1}{\PYGZsh{} Jede zweite Spalte ist x, die nächste y}
+\PYG{k}{for} \PYG{n}{i} \PYG{o+ow}{in} \PYG{n+nb}{range}\PYG{p}{(}\PYG{l+m+mi}{0}\PYG{p}{,} \PYG{n}{num\PYGZus{}cols}\PYG{o}{\PYGZhy{}}\PYG{l+m+mi}{1}\PYG{p}{,} \PYG{l+m+mi}{2}\PYG{p}{):}
+    \PYG{n}{x\PYGZus{}col} \PYG{o}{=} \PYG{n}{df}\PYG{o}{.}\PYG{n}{columns}\PYG{p}{[}\PYG{n}{i}\PYG{p}{]}
+    \PYG{n}{y\PYGZus{}col} \PYG{o}{=} \PYG{n}{df}\PYG{o}{.}\PYG{n}{columns}\PYG{p}{[}\PYG{n}{i} \PYG{o}{+} \PYG{l+m+mi}{1}\PYG{p}{]}
+    \PYG{n+nb}{print}\PYG{p}{(}\PYG{n}{df}\PYG{o}{.}\PYG{n}{columns}\PYG{p}{[}\PYG{n}{i}\PYG{p}{])}
+    \PYG{c+c1}{\PYGZsh{} Plotten, leere Werte ignorieren}
+    \PYG{n}{plt}\PYG{o}{.}\PYG{n}{plot}\PYG{p}{(}\PYG{n}{df}\PYG{p}{[}\PYG{n}{x\PYGZus{}col}\PYG{p}{],} \PYG{n}{df}\PYG{p}{[}\PYG{n}{y\PYGZus{}col}\PYG{p}{],} \PYG{n}{label}\PYG{o}{=}\PYG{l+s+sa}{f}\PYG{l+s+s2}{\PYGZdq{}df.columns[i]\PYGZdq{}}\PYG{p}{)}
+
+\PYG{c+c1}{\PYGZsh{} Achsenbeschriftungen, Legende etc.}
+\PYG{n}{plt}\PYG{o}{.}\PYG{n}{xlabel}\PYG{p}{(}\PYG{l+s+sa}{r}\PYG{l+s+s2}{\PYGZdq{}wavelength \PYGZdl{}[\PYGZbs{}si\PYGZob{}\PYGZbs{}angstrom\PYGZcb{}]\PYGZdl{}\PYGZdq{}}\PYG{p}{)}
+\PYG{n}{plt}\PYG{o}{.}\PYG{n}{ylabel}\PYG{p}{(}\PYG{l+s+sa}{r}\PYG{l+s+s2}{\PYGZdq{}Reflection \PYGZdl{}[\PYGZbs{}si\PYGZob{}\PYGZbs{}percent\PYGZcb{}]\PYGZdl{}\PYGZdq{}}\PYG{p}{)}
+\PYG{n}{plt}\PYG{o}{.}\PYG{n}{title}\PYG{p}{(}\PYG{l+s+s2}{\PYGZdq{}Reflection of several pv materials\PYGZdq{}}\PYG{p}{)}
+\PYG{n}{plt}\PYG{o}{.}\PYG{n}{legend}\PYG{p}{()}
+\PYG{n}{plt}\PYG{o}{.}\PYG{n}{grid}\PYG{p}{(}\PYG{k+kc}{True}\PYG{p}{)}
+\PYG{n}{plt}\PYG{o}{.}\PYG{n}{tight\PYGZus{}layout}\PYG{p}{()}
+\PYG{n}{plt}\PYG{o}{.}\PYG{n}{savefig}\PYG{p}{(}\PYG{l+s+s2}{\PYGZdq{}build/plot.pdf\PYGZdq{}}\PYG{p}{)} 
+
+
+\PYG{c+c1}{\PYGZsh{}x = np.linspace(0, 10, 1000)}
+\PYG{c+c1}{\PYGZsh{}y = x ** np.sin(x)}
+\PYG{c+c1}{\PYGZsh{}}
+\PYG{c+c1}{\PYGZsh{}fig, (ax1, ax2) = plt.subplots(1, 2, layout=\PYGZdq{}constrained\PYGZdq{})}
+\PYG{c+c1}{\PYGZsh{}ax1.plot(x, y, label=\PYGZdq{}Kurve\PYGZdq{})}
+\PYG{c+c1}{\PYGZsh{}ax1.set\PYGZus{}xlabel(r\PYGZdq{}\PYGZdl{}\PYGZbs{}alpha \PYGZbs{}mathbin\PYGZob{}/\PYGZcb{} \PYGZbs{}unit\PYGZob{}\PYGZbs{}ohm\PYGZcb{}\PYGZdl{}\PYGZdq{})}
+\PYG{c+c1}{\PYGZsh{}ax1.set\PYGZus{}ylabel(r\PYGZdq{}\PYGZdl{}y \PYGZbs{}mathbin\PYGZob{}/\PYGZcb{} \PYGZbs{}unit\PYGZob{}\PYGZbs{}micro\PYGZbs{}joule\PYGZcb{}\PYGZdl{}\PYGZdq{})}
+\PYG{c+c1}{\PYGZsh{}ax1.legend(loc=\PYGZdq{}best\PYGZdq{})}
+\PYG{c+c1}{\PYGZsh{}}
+\PYG{c+c1}{\PYGZsh{}ax2.plot(x, y, label=\PYGZdq{}Kurve\PYGZdq{})}
+\PYG{c+c1}{\PYGZsh{}ax2.set\PYGZus{}xlabel(r\PYGZdq{}\PYGZdl{}\PYGZbs{}alpha \PYGZbs{}mathbin\PYGZob{}/\PYGZcb{} \PYGZbs{}unit\PYGZob{}\PYGZbs{}ohm\PYGZcb{}\PYGZdl{}\PYGZdq{})}
+\PYG{c+c1}{\PYGZsh{}ax2.set\PYGZus{}ylabel(r\PYGZdq{}\PYGZdl{}y \PYGZbs{}mathbin\PYGZob{}/\PYGZcb{} \PYGZbs{}unit\PYGZob{}\PYGZbs{}micro\PYGZbs{}joule\PYGZcb{}\PYGZdl{}\PYGZdq{})}
+\PYG{c+c1}{\PYGZsh{}ax2.legend(loc=\PYGZdq{}best\PYGZdq{})}
+\PYG{c+c1}{\PYGZsh{}}
+\PYG{c+c1}{\PYGZsh{}fig.savefig(\PYGZdq{}vXXX/build/plot.pdf\PYGZdq{})}
+\end{Verbatim}
