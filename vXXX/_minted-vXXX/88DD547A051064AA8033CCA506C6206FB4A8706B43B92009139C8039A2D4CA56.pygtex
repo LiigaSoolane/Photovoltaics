@@ -1,0 +1,185 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{k+kn}{import} \PYG{n+nn}{matplotlib.pyplot} \PYG{k}{as} \PYG{n+nn}{plt}
+\PYG{k+kn}{import} \PYG{n+nn}{numpy} \PYG{k}{as} \PYG{n+nn}{np}
+\PYG{k+kn}{import} \PYG{n+nn}{pandas} \PYG{k}{as} \PYG{n+nn}{pd}
+\PYG{k+kn}{import} \PYG{n+nn}{matplotlib} \PYG{k}{as} \PYG{n+nn}{mpl}
+\PYG{k+kn}{from} \PYG{n+nn}{scipy.signal} \PYG{k+kn}{import} \PYG{n}{find\PYGZus{}peaks}
+\PYG{k+kn}{import} \PYG{n+nn}{numpy} \PYG{k}{as} \PYG{n+nn}{np}
+\PYG{k+kn}{from} \PYG{n+nn}{scipy.optimize} \PYG{k+kn}{import} \PYG{n}{curve\PYGZus{}fit}
+
+
+\PYG{c+c1}{\PYGZsh{}mpl.rcParams.update(\PYGZob{}}
+\PYG{c+c1}{\PYGZsh{}    \PYGZdq{}text.usetex\PYGZdq{}: True,}
+\PYG{c+c1}{\PYGZsh{}    \PYGZdq{}pgf.texsystem\PYGZdq{}: \PYGZdq{}lualatex\PYGZdq{},  \PYGZsh{} zwingt lualatex}
+\PYG{c+c1}{\PYGZsh{}    \PYGZdq{}pgf.preamble\PYGZdq{}: r\PYGZdq{}\PYGZbs{}usepackage\PYGZob{}siunitx\PYGZcb{}\PYGZdq{}}
+\PYG{c+c1}{\PYGZsh{}\PYGZcb{})}
+
+\PYG{k}{def} \PYG{n+nf}{reffunc}\PYG{p}{(}\PYG{n}{index}\PYG{p}{,} \PYG{n}{m}\PYG{p}{,} \PYG{n}{d}\PYG{p}{):}
+    \PYG{k}{return} \PYG{p}{(}\PYG{l+m+mi}{2}\PYG{o}{*}\PYG{n}{d}\PYG{o}{/}\PYG{p}{(}\PYG{n}{m} \PYG{o}{\PYGZhy{}} \PYG{n}{index}\PYG{p}{))}
+
+
+\PYG{k}{def} \PYG{n+nf}{ex1}\PYG{p}{():}
+
+    \PYG{n}{df} \PYG{o}{=} \PYG{n}{pd}\PYG{o}{.}\PYG{n}{read\PYGZus{}csv}\PYG{p}{(}\PYG{l+s+s2}{\PYGZdq{}data/Reflection.csv\PYGZdq{}}\PYG{p}{,} \PYG{n}{sep}\PYG{o}{=}\PYG{l+s+s2}{\PYGZdq{},\PYGZdq{}}\PYG{p}{,} \PYG{n}{header}\PYG{o}{=}\PYG{p}{[}\PYG{l+m+mi}{0}\PYG{p}{,}\PYG{l+m+mi}{1}\PYG{p}{],} \PYG{n}{decimal}\PYG{o}{=}\PYG{l+s+s2}{\PYGZdq{}.\PYGZdq{}}\PYG{p}{)}
+    \PYG{c+c1}{\PYGZsh{}print(df.columns)}
+    \PYG{n}{num\PYGZus{}cols} \PYG{o}{=} \PYG{n}{df}\PYG{o}{.}\PYG{n}{shape}\PYG{p}{[}\PYG{l+m+mi}{1}\PYG{p}{]}
+
+    \PYG{n}{fig}\PYG{p}{,} \PYG{p}{(}\PYG{n}{ax1}\PYG{p}{,} \PYG{n}{ax2}\PYG{p}{)} \PYG{o}{=} \PYG{n}{plt}\PYG{o}{.}\PYG{n}{subplots}\PYG{p}{(}\PYG{l+m+mi}{2}\PYG{p}{,} \PYG{l+m+mi}{1}\PYG{p}{,} \PYG{n}{figsize}\PYG{o}{=}\PYG{p}{(}\PYG{l+m+mi}{7}\PYG{p}{,} \PYG{l+m+mi}{10}\PYG{p}{))} 
+
+    \PYG{c+c1}{\PYGZsh{} Jede zweite Spalte ist x, die nächste y}
+    \PYG{k}{for} \PYG{n}{i} \PYG{o+ow}{in} \PYG{n+nb}{range}\PYG{p}{(}\PYG{l+m+mi}{0}\PYG{p}{,} \PYG{n}{num\PYGZus{}cols}\PYG{o}{\PYGZhy{}}\PYG{l+m+mi}{1}\PYG{p}{,} \PYG{l+m+mi}{2}\PYG{p}{):}
+        \PYG{n}{x\PYGZus{}col} \PYG{o}{=} \PYG{n}{df}\PYG{o}{.}\PYG{n}{columns}\PYG{p}{[}\PYG{n}{i}\PYG{p}{]}
+        \PYG{n}{y\PYGZus{}col} \PYG{o}{=} \PYG{n}{df}\PYG{o}{.}\PYG{n}{columns}\PYG{p}{[}\PYG{n}{i} \PYG{o}{+} \PYG{l+m+mi}{1}\PYG{p}{]}
+        \PYG{c+c1}{\PYGZsh{} Plotten, leere Werte ignorieren}
+        \PYG{n}{ax1}\PYG{o}{.}\PYG{n}{plot}\PYG{p}{(}\PYG{n}{df}\PYG{p}{[}\PYG{n}{x\PYGZus{}col}\PYG{p}{],} \PYG{n}{df}\PYG{p}{[}\PYG{n}{y\PYGZus{}col}\PYG{p}{],} \PYG{n}{label}\PYG{o}{=}\PYG{n}{df}\PYG{o}{.}\PYG{n}{columns}\PYG{p}{[}\PYG{n}{i}\PYG{p}{][}\PYG{l+m+mi}{0}\PYG{p}{])}
+
+        \PYG{n}{reflection} \PYG{o}{=} \PYG{p}{(}\PYG{n}{df}\PYG{p}{[}\PYG{n}{y\PYGZus{}col}\PYG{p}{]}\PYG{o}{/}\PYG{l+m+mi}{100}\PYG{p}{)}\PYG{o}{**}\PYG{p}{(}\PYG{l+m+mi}{1}\PYG{o}{/}\PYG{l+m+mi}{2}\PYG{p}{)}
+        \PYG{n}{refractive\PYGZus{}index} \PYG{o}{=} \PYG{p}{(}\PYG{l+m+mi}{1}\PYG{o}{+}\PYG{n}{reflection}\PYG{p}{)}\PYG{o}{/}\PYG{p}{(}\PYG{l+m+mi}{1}\PYG{o}{\PYGZhy{}}\PYG{n}{reflection}\PYG{p}{)}
+        \PYG{n}{ax2}\PYG{o}{.}\PYG{n}{plot}\PYG{p}{(}\PYG{n}{df}\PYG{p}{[}\PYG{n}{x\PYGZus{}col}\PYG{p}{],} \PYG{n}{refractive\PYGZus{}index}\PYG{p}{,} \PYG{n}{label}\PYG{o}{=}\PYG{n}{df}\PYG{o}{.}\PYG{n}{columns}\PYG{p}{[}\PYG{n}{i}\PYG{p}{][}\PYG{l+m+mi}{0}\PYG{p}{])}
+
+
+    \PYG{c+c1}{\PYGZsh{} Achsenbeschriftungen, Legende etc.}
+    \PYG{n}{ax1}\PYG{o}{.}\PYG{n}{set\PYGZus{}title}\PYG{p}{(}\PYG{l+s+s2}{\PYGZdq{}Reflection of several pv materials\PYGZdq{}}\PYG{p}{)}
+    \PYG{n}{ax1}\PYG{o}{.}\PYG{n}{set\PYGZus{}ylabel}\PYG{p}{(}\PYG{l+s+sa}{r}\PYG{l+s+s2}{\PYGZdq{}Reflection \PYGZdl{}[\PYGZbs{}si\PYGZob{}\PYGZbs{}percent\PYGZcb{}]\PYGZdl{}\PYGZdq{}}\PYG{p}{)}
+    \PYG{n}{ax2}\PYG{o}{.}\PYG{n}{set\PYGZus{}title}\PYG{p}{(}\PYG{l+s+s2}{\PYGZdq{}Refraction index of several pv materials\PYGZdq{}}\PYG{p}{)}
+    \PYG{n}{ax2}\PYG{o}{.}\PYG{n}{set\PYGZus{}xlabel}\PYG{p}{(}\PYG{l+s+sa}{r}\PYG{l+s+s2}{\PYGZdq{}wavelength \PYGZdl{}[\PYGZbs{}si\PYGZob{}\PYGZbs{}angstrom\PYGZcb{}]\PYGZdl{}\PYGZdq{}}\PYG{p}{)}
+    \PYG{n}{ax2}\PYG{o}{.}\PYG{n}{set\PYGZus{}ylabel}\PYG{p}{(}\PYG{l+s+sa}{r}\PYG{l+s+s2}{\PYGZdq{}Refractive Index\PYGZdq{}}\PYG{p}{)}
+    \PYG{n}{ax1}\PYG{o}{.}\PYG{n}{legend}\PYG{p}{(}\PYG{n}{loc}\PYG{o}{=}\PYG{l+s+s2}{\PYGZdq{}upper right\PYGZdq{}}\PYG{p}{)}
+    \PYG{n}{ax2}\PYG{o}{.}\PYG{n}{legend}\PYG{p}{(}\PYG{n}{loc}\PYG{o}{=}\PYG{l+s+s2}{\PYGZdq{}upper right\PYGZdq{}}\PYG{p}{)}
+    \PYG{c+c1}{\PYGZsh{}plt.grid(True)}
+    \PYG{n}{plt}\PYG{o}{.}\PYG{n}{tight\PYGZus{}layout}\PYG{p}{()}
+    \PYG{n}{plt}\PYG{o}{.}\PYG{n}{savefig}\PYG{p}{(}\PYG{l+s+s2}{\PYGZdq{}build/reflections.pdf\PYGZdq{}}\PYG{p}{)} 
+
+    \PYG{n}{x\PYGZus{}col} \PYG{o}{=} \PYG{n}{pd}\PYG{o}{.}\PYG{n}{to\PYGZus{}numeric}\PYG{p}{(}\PYG{n}{df}\PYG{o}{.}\PYG{n}{iloc}\PYG{p}{[:,} \PYG{l+m+mi}{4}\PYG{p}{],} \PYG{n}{errors}\PYG{o}{=}\PYG{l+s+s1}{\PYGZsq{}coerce\PYGZsq{}}\PYG{p}{)}
+    \PYG{n}{y\PYGZus{}col} \PYG{o}{=} \PYG{n}{pd}\PYG{o}{.}\PYG{n}{to\PYGZus{}numeric}\PYG{p}{(}\PYG{n}{df}\PYG{o}{.}\PYG{n}{iloc}\PYG{p}{[:,} \PYG{l+m+mi}{5}\PYG{p}{],} \PYG{n}{errors}\PYG{o}{=}\PYG{l+s+s1}{\PYGZsq{}coerce\PYGZsq{}}\PYG{p}{)}
+
+    \PYG{n}{peaks}\PYG{p}{,} \PYG{n}{properties} \PYG{o}{=} \PYG{n}{find\PYGZus{}peaks}\PYG{p}{(}
+        \PYG{n}{y\PYGZus{}col}\PYG{p}{,}
+        \PYG{n}{height}\PYG{o}{=}\PYG{l+m+mi}{3}\PYG{p}{,}
+        \PYG{n}{distance}\PYG{o}{=}\PYG{l+m+mi}{30}\PYG{p}{,}
+        \PYG{n}{prominence}\PYG{o}{=}\PYG{l+m+mf}{0.5}
+    \PYG{p}{)}
+
+    \PYG{n}{peaks}\PYG{p}{[}\PYG{l+m+mi}{4}\PYG{p}{]} \PYG{o}{=} \PYG{l+m+mi}{1180}
+
+    \PYG{n+nb}{print}\PYG{p}{(}\PYG{l+s+s2}{\PYGZdq{}x\PYGZhy{}values of maxima:\PYGZdq{}}\PYG{p}{,} \PYG{n}{x\PYGZus{}col}\PYG{o}{.}\PYG{n}{iloc}\PYG{p}{[}\PYG{n}{peaks}\PYG{p}{])}
+
+    \PYG{n}{reflection} \PYG{o}{=} \PYG{p}{(}\PYG{n}{pd}\PYG{o}{.}\PYG{n}{to\PYGZus{}numeric}\PYG{p}{(}\PYG{n}{df}\PYG{o}{.}\PYG{n}{iloc}\PYG{p}{[:,} \PYG{l+m+mi}{1}\PYG{p}{],} \PYG{n}{errors}\PYG{o}{=}\PYG{l+s+s1}{\PYGZsq{}coerce\PYGZsq{}}\PYG{p}{)}\PYG{o}{/} \PYG{l+m+mi}{100}\PYG{p}{)}\PYG{o}{**}\PYG{l+m+mf}{0.5}
+    \PYG{n}{refractive\PYGZus{}index} \PYG{o}{=} \PYG{p}{(}\PYG{l+m+mi}{1} \PYG{o}{+} \PYG{n}{reflection}\PYG{p}{)} \PYG{o}{/} \PYG{p}{(}\PYG{l+m+mi}{1} \PYG{o}{\PYGZhy{}} \PYG{n}{reflection}\PYG{p}{)}
+
+    \PYG{n}{index} \PYG{o}{=} \PYG{n}{np}\PYG{o}{.}\PYG{n}{linspace}\PYG{p}{(}\PYG{l+m+mi}{0}\PYG{p}{,}\PYG{l+m+mi}{9}\PYG{p}{,} \PYG{l+m+mi}{10}\PYG{p}{)}
+    \PYG{n+nb}{print}\PYG{p}{(}\PYG{n}{index}\PYG{p}{)}
+    \PYG{n}{y} \PYG{o}{=} \PYG{n}{x\PYGZus{}col}\PYG{p}{[}\PYG{n}{peaks}\PYG{p}{]} \PYG{o}{/} \PYG{n}{refractive\PYGZus{}index}\PYG{p}{[}\PYG{n}{peaks}\PYG{p}{]}
+
+    \PYG{n}{m} \PYG{o}{=} \PYG{l+m+mf}{9.5}
+    \PYG{n}{best\PYGZus{}d} \PYG{o}{=} \PYG{k+kc}{None}
+    \PYG{n}{best\PYGZus{}error} \PYG{o}{=} \PYG{n}{np}\PYG{o}{.}\PYG{n}{inf}
+
+    \PYG{k}{def} \PYG{n+nf}{model\PYGZus{}d}\PYG{p}{(}\PYG{n}{x}\PYG{p}{,} \PYG{n}{d}\PYG{p}{):}
+        \PYG{k}{return} \PYG{n}{reffunc}\PYG{p}{(}\PYG{n}{x}\PYG{p}{,} \PYG{l+m+mi}{10}\PYG{p}{,} \PYG{n}{d}\PYG{p}{)}
+
+    \PYG{n}{popt}\PYG{p}{,} \PYG{n}{\PYGZus{}} \PYG{o}{=} \PYG{n}{curve\PYGZus{}fit}\PYG{p}{(}\PYG{n}{model\PYGZus{}d}\PYG{p}{,} \PYG{n}{index}\PYG{p}{,} \PYG{n}{y}\PYG{p}{)}
+    \PYG{n}{best\PYGZus{}d} \PYG{o}{=} \PYG{n}{popt}\PYG{p}{[}\PYG{l+m+mi}{0}\PYG{p}{]}
+
+    \PYG{n}{d} \PYG{o}{=} \PYG{p}{(}\PYG{n}{m}\PYG{o}{\PYGZhy{}}\PYG{n}{index}\PYG{p}{)}\PYG{o}{/}\PYG{n}{refractive\PYGZus{}index}\PYG{p}{[}\PYG{n}{peaks}\PYG{p}{]} \PYG{o}{*} \PYG{n}{x\PYGZus{}col}\PYG{p}{[}\PYG{n}{peaks}\PYG{p}{]} \PYG{o}{/} \PYG{l+m+mi}{2}
+    \PYG{n+nb}{print}\PYG{p}{(}\PYG{n}{np}\PYG{o}{.}\PYG{n}{mean}\PYG{p}{(}\PYG{n}{d}\PYG{p}{))}
+
+
+    \PYG{n}{fig1}\PYG{p}{,} \PYG{n}{ax3} \PYG{o}{=} \PYG{n}{plt}\PYG{o}{.}\PYG{n}{subplots}\PYG{p}{(}\PYG{l+m+mi}{1}\PYG{p}{,} \PYG{l+m+mi}{1}\PYG{p}{)} 
+    \PYG{n}{plt}\PYG{o}{.}\PYG{n}{plot}\PYG{p}{(}\PYG{n}{x\PYGZus{}col}\PYG{p}{[}\PYG{n}{peaks}\PYG{p}{],} \PYG{n}{best\PYGZus{}d}\PYG{o}{*}\PYG{l+m+mi}{2}\PYG{o}{*}\PYG{n}{refractive\PYGZus{}index}\PYG{p}{[}\PYG{n}{peaks}\PYG{p}{]}\PYG{o}{/}\PYG{p}{(}\PYG{n}{m}\PYG{o}{\PYGZhy{}}\PYG{n}{index}\PYG{p}{),} \PYG{n}{label}\PYG{o}{=}\PYG{l+s+s2}{\PYGZdq{}fit\PYGZus{}best\PYGZdq{}}\PYG{p}{)}
+    \PYG{n}{plt}\PYG{o}{.}\PYG{n}{plot}\PYG{p}{(}\PYG{n}{x\PYGZus{}col}\PYG{p}{[}\PYG{n}{peaks}\PYG{p}{],} \PYG{n}{np}\PYG{o}{.}\PYG{n}{mean}\PYG{p}{(}\PYG{n}{d}\PYG{p}{)}\PYG{o}{*}\PYG{l+m+mi}{2}\PYG{o}{*}\PYG{n}{refractive\PYGZus{}index}\PYG{p}{[}\PYG{n}{peaks}\PYG{p}{]}\PYG{o}{/}\PYG{p}{(}\PYG{n}{m}\PYG{o}{\PYGZhy{}}\PYG{n}{index}\PYG{p}{),} \PYG{n}{label}\PYG{o}{=}\PYG{l+s+s2}{\PYGZdq{}fit\PYGZus{}mean\PYGZdq{}}\PYG{p}{)}
+    \PYG{n}{plt}\PYG{o}{.}\PYG{n}{plot}\PYG{p}{(}\PYG{n}{x\PYGZus{}col}\PYG{p}{[}\PYG{n}{peaks}\PYG{p}{],} \PYG{n}{x\PYGZus{}col}\PYG{p}{[}\PYG{n}{peaks}\PYG{p}{],} \PYG{n}{label}\PYG{o}{=}\PYG{l+s+s2}{\PYGZdq{}data\PYGZdq{}}\PYG{p}{)}
+    \PYG{n}{plt}\PYG{o}{.}\PYG{n}{savefig}\PYG{p}{(}\PYG{l+s+s2}{\PYGZdq{}build/fit.pdf\PYGZdq{}}\PYG{p}{)}
+    \PYG{n+nb}{print}\PYG{p}{(}\PYG{l+s+s2}{\PYGZdq{}Optimal m:\PYGZdq{}}\PYG{p}{,} \PYG{l+m+mi}{10}\PYG{p}{)}
+    \PYG{n+nb}{print}\PYG{p}{(}\PYG{l+s+s2}{\PYGZdq{}Optimal d:\PYGZdq{}}\PYG{p}{,} \PYG{n}{best\PYGZus{}d}\PYG{p}{)}
+
+
+
+
+
+
+
+\PYG{k}{def} \PYG{n+nf}{ex2}\PYG{p}{():}
+    \PYG{c+c1}{\PYGZsh{} read the data}
+
+    \PYG{n}{a\PYGZus{}dark} \PYG{o}{=} \PYG{n}{np}\PYG{o}{.}\PYG{n}{genfromtxt}\PYG{p}{(}\PYG{l+s+s2}{\PYGZdq{}data/UI\PYGZus{}a\PYGZhy{}Si\PYGZus{}dark.txt\PYGZdq{}}\PYG{p}{,} \PYG{n}{skip\PYGZus{}header}\PYG{o}{=}\PYG{l+m+mi}{4}\PYG{p}{)}
+    \PYG{n}{a\PYGZus{}light} \PYG{o}{=} \PYG{n}{np}\PYG{o}{.}\PYG{n}{genfromtxt}\PYG{p}{(}\PYG{l+s+s2}{\PYGZdq{}data/UI\PYGZus{}a\PYGZhy{}Si\PYGZus{}light.txt\PYGZdq{}}\PYG{p}{,}  \PYG{n}{skip\PYGZus{}header}\PYG{o}{=}\PYG{l+m+mi}{4}\PYG{p}{)}
+    \PYG{n}{c\PYGZus{}dark} \PYG{o}{=} \PYG{n}{np}\PYG{o}{.}\PYG{n}{genfromtxt}\PYG{p}{(}\PYG{l+s+s2}{\PYGZdq{}data/UI\PYGZus{}c\PYGZhy{}Si\PYGZus{}dark.txt\PYGZdq{}}\PYG{p}{,}  \PYG{n}{skip\PYGZus{}header}\PYG{o}{=}\PYG{l+m+mi}{4}\PYG{p}{)}
+    \PYG{n}{c\PYGZus{}light} \PYG{o}{=} \PYG{n}{np}\PYG{o}{.}\PYG{n}{genfromtxt}\PYG{p}{(}\PYG{l+s+s2}{\PYGZdq{}data/UI\PYGZus{}c\PYGZhy{}Si\PYGZus{}light.txt\PYGZdq{}}\PYG{p}{,} \PYG{n}{skip\PYGZus{}header}\PYG{o}{=}\PYG{l+m+mi}{4}\PYG{p}{)}
+
+    \PYG{n}{U\PYGZus{}a\PYGZus{}dark} \PYG{o}{=} \PYG{n}{a\PYGZus{}dark}\PYG{p}{[:,} \PYG{l+m+mi}{0}\PYG{p}{]}
+    \PYG{n}{A\PYGZus{}a\PYGZus{}dark} \PYG{o}{=} \PYG{n}{a\PYGZus{}dark}\PYG{p}{[:,} \PYG{l+m+mi}{1}\PYG{p}{]}
+    \PYG{n}{U\PYGZus{}a\PYGZus{}light} \PYG{o}{=} \PYG{n}{a\PYGZus{}light}\PYG{p}{[:,} \PYG{l+m+mi}{0}\PYG{p}{]}
+    \PYG{n}{A\PYGZus{}a\PYGZus{}light} \PYG{o}{=} \PYG{n}{a\PYGZus{}light}\PYG{p}{[:,} \PYG{l+m+mi}{1}\PYG{p}{]}
+
+    \PYG{n}{U\PYGZus{}c\PYGZus{}dark} \PYG{o}{=} \PYG{n}{c\PYGZus{}dark}\PYG{p}{[:,} \PYG{l+m+mi}{0}\PYG{p}{]}
+    \PYG{n}{A\PYGZus{}c\PYGZus{}dark} \PYG{o}{=} \PYG{n}{c\PYGZus{}dark}\PYG{p}{[:,} \PYG{l+m+mi}{1}\PYG{p}{]}
+    \PYG{n}{U\PYGZus{}c\PYGZus{}light} \PYG{o}{=} \PYG{n}{c\PYGZus{}light}\PYG{p}{[:,} \PYG{l+m+mi}{0}\PYG{p}{]}
+    \PYG{n}{A\PYGZus{}c\PYGZus{}light} \PYG{o}{=} \PYG{n}{c\PYGZus{}light}\PYG{p}{[:,} \PYG{l+m+mi}{1}\PYG{p}{]}
+
+    \PYG{c+c1}{\PYGZsh{}plot the IU curve  }
+    \PYG{n}{fig1} \PYG{o}{=} \PYG{n}{plt}\PYG{o}{.}\PYG{n}{figure}\PYG{p}{()}
+    \PYG{n}{ax1} \PYG{o}{=} \PYG{n}{fig1}\PYG{o}{.}\PYG{n}{add\PYGZus{}subplot}\PYG{p}{(}\PYG{l+m+mi}{1}\PYG{p}{,} \PYG{l+m+mi}{2}\PYG{p}{,} \PYG{l+m+mi}{1}\PYG{p}{)}
+    \PYG{n}{ax2} \PYG{o}{=} \PYG{n}{fig1}\PYG{o}{.}\PYG{n}{add\PYGZus{}subplot}\PYG{p}{(}\PYG{l+m+mi}{1}\PYG{p}{,} \PYG{l+m+mi}{2}\PYG{p}{,} \PYG{l+m+mi}{2}\PYG{p}{)}
+
+    \PYG{n}{ax1}\PYG{o}{.}\PYG{n}{plot}\PYG{p}{(}\PYG{n}{U\PYGZus{}a\PYGZus{}dark}\PYG{p}{,} \PYG{n}{A\PYGZus{}a\PYGZus{}dark}\PYG{p}{,} \PYG{n}{label}\PYG{o}{=}\PYG{l+s+s2}{\PYGZdq{}dark\PYGZdq{}}\PYG{p}{)}
+    \PYG{n}{ax1}\PYG{o}{.}\PYG{n}{plot}\PYG{p}{(}\PYG{n}{U\PYGZus{}a\PYGZus{}light}\PYG{p}{,} \PYG{n}{A\PYGZus{}a\PYGZus{}light}\PYG{p}{,} \PYG{n}{label}\PYG{o}{=}\PYG{l+s+s2}{\PYGZdq{}light\PYGZdq{}}\PYG{p}{)}
+    \PYG{n}{ax1}\PYG{o}{.}\PYG{n}{set\PYGZus{}title}\PYG{p}{(}\PYG{l+s+s2}{\PYGZdq{}amorphous Silicon\PYGZdq{}}\PYG{p}{)}
+    \PYG{n}{ax1}\PYG{o}{.}\PYG{n}{set\PYGZus{}xlabel}\PYG{p}{(}\PYG{l+s+sa}{r}\PYG{l+s+s2}{\PYGZdq{}Voltage \PYGZdl{}[\PYGZbs{}si\PYGZob{}\PYGZbs{}volt\PYGZcb{}]\PYGZdl{}\PYGZdq{}}\PYG{p}{)}
+    \PYG{n}{ax1}\PYG{o}{.}\PYG{n}{set\PYGZus{}ylabel}\PYG{p}{(}\PYG{l+s+sa}{r}\PYG{l+s+s2}{\PYGZdq{}Current \PYGZdl{}[\PYGZbs{}si\PYGZob{}\PYGZbs{}milli\PYGZbs{}ampere\PYGZcb{}]\PYGZdl{}\PYGZdq{}}\PYG{p}{)}
+    \PYG{n}{ax1}\PYG{o}{.}\PYG{n}{legend}\PYG{p}{(}\PYG{n}{loc}\PYG{o}{=}\PYG{l+s+s2}{\PYGZdq{}upper left\PYGZdq{}}\PYG{p}{)}
+
+
+    \PYG{n}{ax2}\PYG{o}{.}\PYG{n}{plot}\PYG{p}{(}\PYG{n}{U\PYGZus{}c\PYGZus{}dark}\PYG{p}{,} \PYG{n}{A\PYGZus{}c\PYGZus{}dark}\PYG{p}{,} \PYG{n}{label}\PYG{o}{=}\PYG{l+s+s2}{\PYGZdq{}dark\PYGZdq{}}\PYG{p}{)}
+    \PYG{n}{ax2}\PYG{o}{.}\PYG{n}{plot}\PYG{p}{(}\PYG{n}{U\PYGZus{}c\PYGZus{}light}\PYG{p}{,} \PYG{n}{A\PYGZus{}c\PYGZus{}light}\PYG{p}{,} \PYG{n}{label}\PYG{o}{=}\PYG{l+s+s2}{\PYGZdq{}light\PYGZdq{}}\PYG{p}{)}
+    \PYG{n}{ax2}\PYG{o}{.}\PYG{n}{set\PYGZus{}title}\PYG{p}{(}\PYG{l+s+s2}{\PYGZdq{}crystalline Silicon\PYGZdq{}}\PYG{p}{)}
+    \PYG{n}{ax2}\PYG{o}{.}\PYG{n}{set\PYGZus{}xlabel}\PYG{p}{(}\PYG{l+s+sa}{r}\PYG{l+s+s2}{\PYGZdq{}Voltage \PYGZdl{}[\PYGZbs{}si\PYGZob{}\PYGZbs{}volt\PYGZcb{}]\PYGZdl{}\PYGZdq{}}\PYG{p}{)}
+    \PYG{n}{ax2}\PYG{o}{.}\PYG{n}{set\PYGZus{}ylabel}\PYG{p}{(}\PYG{l+s+sa}{r}\PYG{l+s+s2}{\PYGZdq{}Current \PYGZdl{}[\PYGZbs{}si\PYGZob{}\PYGZbs{}milli\PYGZbs{}ampere\PYGZcb{}]\PYGZdl{}\PYGZdq{}}\PYG{p}{)}
+    \PYG{n}{ax2}\PYG{o}{.}\PYG{n}{legend}\PYG{p}{(}\PYG{n}{loc}\PYG{o}{=}\PYG{l+s+s2}{\PYGZdq{}upper left\PYGZdq{}}\PYG{p}{)}
+
+    \PYG{n}{plt}\PYG{o}{.}\PYG{n}{tight\PYGZus{}layout}\PYG{p}{()}
+    \PYG{n}{plt}\PYG{o}{.}\PYG{n}{savefig}\PYG{p}{(}\PYG{l+s+s2}{\PYGZdq{}build/UI.pdf\PYGZdq{}}\PYG{p}{)}
+
+    \PYG{c+c1}{\PYGZsh{}a) find R\PYGZus{}S and R\PYGZus{}P}
+
+
+
+    \PYG{c+c1}{\PYGZsh{}b) find the V\PYGZus{}oc and I\PYGZus{}sc}
+    \PYG{n}{V\PYGZus{}oc\PYGZus{}index\PYGZus{}a} \PYG{o}{=} \PYG{n}{np}\PYG{o}{.}\PYG{n}{argmin}\PYG{p}{(}\PYG{n}{np}\PYG{o}{.}\PYG{n}{abs}\PYG{p}{(}\PYG{n}{A\PYGZus{}a\PYGZus{}light}\PYG{p}{))} 
+    \PYG{n}{I\PYGZus{}sc\PYGZus{}index\PYGZus{}a} \PYG{o}{=} \PYG{n}{np}\PYG{o}{.}\PYG{n}{argmin}\PYG{p}{(}\PYG{n}{np}\PYG{o}{.}\PYG{n}{abs}\PYG{p}{(}\PYG{n}{U\PYGZus{}a\PYGZus{}light}\PYG{p}{))}
+    \PYG{n}{V\PYGZus{}oc\PYGZus{}index\PYGZus{}c} \PYG{o}{=} \PYG{n}{np}\PYG{o}{.}\PYG{n}{argmin}\PYG{p}{(}\PYG{n}{np}\PYG{o}{.}\PYG{n}{abs}\PYG{p}{(}\PYG{n}{A\PYGZus{}c\PYGZus{}light}\PYG{p}{))} 
+    \PYG{n}{I\PYGZus{}sc\PYGZus{}index\PYGZus{}c} \PYG{o}{=} \PYG{n}{np}\PYG{o}{.}\PYG{n}{argmin}\PYG{p}{(}\PYG{n}{np}\PYG{o}{.}\PYG{n}{abs}\PYG{p}{(}\PYG{n}{U\PYGZus{}c\PYGZus{}light}\PYG{p}{))}
+
+    \PYG{n+nb}{print}\PYG{p}{(}\PYG{l+s+s2}{\PYGZdq{}V\PYGZus{}oc amorphous:\PYGZdq{}}\PYG{p}{,} \PYG{n}{U\PYGZus{}a\PYGZus{}light}\PYG{p}{[}\PYG{n}{V\PYGZus{}oc\PYGZus{}index\PYGZus{}a}\PYG{p}{])}
+    \PYG{n+nb}{print}\PYG{p}{(}\PYG{l+s+s2}{\PYGZdq{}I\PYGZus{}sc amorphous:\PYGZdq{}}\PYG{p}{,} \PYG{n}{A\PYGZus{}a\PYGZus{}light}\PYG{p}{[}\PYG{n}{I\PYGZus{}sc\PYGZus{}index\PYGZus{}a}\PYG{p}{])}
+    \PYG{n+nb}{print}\PYG{p}{(}\PYG{l+s+s2}{\PYGZdq{}V\PYGZus{}oc crystalline:\PYGZdq{}}\PYG{p}{,} \PYG{n}{U\PYGZus{}c\PYGZus{}light}\PYG{p}{[}\PYG{n}{V\PYGZus{}oc\PYGZus{}index\PYGZus{}c}\PYG{p}{])}
+    \PYG{n+nb}{print}\PYG{p}{(}\PYG{l+s+s2}{\PYGZdq{}I\PYGZus{}sc crystalline:\PYGZdq{}}\PYG{p}{,} \PYG{n}{A\PYGZus{}c\PYGZus{}light}\PYG{p}{[}\PYG{n}{I\PYGZus{}sc\PYGZus{}index\PYGZus{}c}\PYG{p}{])}
+
+    \PYG{c+c1}{\PYGZsh{}c) calculate the FF}
+
+    \PYG{n}{P\PYGZus{}a} \PYG{o}{=} \PYG{n}{U\PYGZus{}a\PYGZus{}light}\PYG{p}{[}\PYG{n}{I\PYGZus{}sc\PYGZus{}index\PYGZus{}a}\PYG{p}{:}\PYG{n}{V\PYGZus{}oc\PYGZus{}index\PYGZus{}a}\PYG{p}{]} \PYG{o}{*} \PYG{n}{A\PYGZus{}a\PYGZus{}light}\PYG{p}{[}\PYG{n}{I\PYGZus{}sc\PYGZus{}index\PYGZus{}a}\PYG{p}{:}\PYG{n}{V\PYGZus{}oc\PYGZus{}index\PYGZus{}a}\PYG{p}{]}
+    \PYG{n}{P\PYGZus{}c} \PYG{o}{=} \PYG{n}{U\PYGZus{}c\PYGZus{}light}\PYG{p}{[}\PYG{n}{I\PYGZus{}sc\PYGZus{}index\PYGZus{}c}\PYG{p}{:}\PYG{n}{V\PYGZus{}oc\PYGZus{}index\PYGZus{}c}\PYG{p}{]} \PYG{o}{*} \PYG{n}{A\PYGZus{}c\PYGZus{}light}\PYG{p}{[}\PYG{n}{I\PYGZus{}sc\PYGZus{}index\PYGZus{}c}\PYG{p}{:}\PYG{n}{V\PYGZus{}oc\PYGZus{}index\PYGZus{}c}\PYG{p}{]}
+
+    \PYG{n}{P\PYGZus{}a\PYGZus{}max} \PYG{o}{=} \PYG{n}{np}\PYG{o}{.}\PYG{n}{max}\PYG{p}{(}\PYG{n}{np}\PYG{o}{.}\PYG{n}{abs}\PYG{p}{(}\PYG{n}{P\PYGZus{}a}\PYG{p}{))}
+    \PYG{n}{P\PYGZus{}c\PYGZus{}max} \PYG{o}{=} \PYG{n}{np}\PYG{o}{.}\PYG{n}{max}\PYG{p}{(}\PYG{n}{np}\PYG{o}{.}\PYG{n}{abs}\PYG{p}{(}\PYG{n}{P\PYGZus{}c}\PYG{p}{))}
+
+    \PYG{n}{FF\PYGZus{}a} \PYG{o}{=} \PYG{n}{P\PYGZus{}a\PYGZus{}max} \PYG{o}{/} \PYG{p}{(}\PYG{n}{A\PYGZus{}a\PYGZus{}light}\PYG{p}{[}\PYG{n}{I\PYGZus{}sc\PYGZus{}index\PYGZus{}a}\PYG{p}{]} \PYG{o}{*} \PYG{n}{U\PYGZus{}a\PYGZus{}light}\PYG{p}{[}\PYG{n}{V\PYGZus{}oc\PYGZus{}index\PYGZus{}a}\PYG{p}{])}
+    \PYG{n}{FF\PYGZus{}c} \PYG{o}{=} \PYG{n}{P\PYGZus{}c\PYGZus{}max} \PYG{o}{/} \PYG{p}{(}\PYG{n}{A\PYGZus{}c\PYGZus{}light}\PYG{p}{[}\PYG{n}{I\PYGZus{}sc\PYGZus{}index\PYGZus{}c}\PYG{p}{]} \PYG{o}{*} \PYG{n}{U\PYGZus{}c\PYGZus{}light}\PYG{p}{[}\PYG{n}{V\PYGZus{}oc\PYGZus{}index\PYGZus{}c}\PYG{p}{])}
+
+    \PYG{n+nb}{print}\PYG{p}{(}\PYG{l+s+s2}{\PYGZdq{}FF amorphous:\PYGZdq{}}\PYG{p}{,} \PYG{n}{FF\PYGZus{}a}\PYG{p}{)}
+    \PYG{n+nb}{print}\PYG{p}{(}\PYG{l+s+s2}{\PYGZdq{}FF crystalline:\PYGZdq{}}\PYG{p}{,} \PYG{n}{FF\PYGZus{}c}\PYG{p}{)}
+
+    \PYG{c+c1}{\PYGZsh{}d) find the efficiencies}
+
+    \PYG{n}{solar\PYGZus{}irradiation\PYGZus{}d} \PYG{o}{=} \PYG{l+m+mi}{1000} \PYG{c+c1}{\PYGZsh{} W/m\PYGZca{}2}
+
+    \PYG{n}{eta\PYGZus{}a} \PYG{o}{=} \PYG{n}{P\PYGZus{}a\PYGZus{}max} \PYG{o}{/} \PYG{p}{(}\PYG{l+m+mf}{0.004}\PYG{o}{**}\PYG{l+m+mi}{2} \PYG{o}{*}\PYG{n}{solar\PYGZus{}irradiation\PYGZus{}d}\PYG{p}{)}
+    \PYG{n}{eta\PYGZus{}c} \PYG{o}{=} \PYG{n}{P\PYGZus{}c\PYGZus{}max} \PYG{o}{/} \PYG{p}{(}\PYG{l+m+mf}{0.004}\PYG{o}{**}\PYG{l+m+mi}{2} \PYG{o}{*}\PYG{n}{solar\PYGZus{}irradiation\PYGZus{}d}\PYG{p}{)}
+
+    \PYG{n+nb}{print}\PYG{p}{(}\PYG{l+s+s2}{\PYGZdq{}Efficiency amorphous:\PYGZdq{}}\PYG{p}{,} \PYG{n}{eta\PYGZus{}a}\PYG{p}{)}
+    \PYG{n+nb}{print}\PYG{p}{(}\PYG{l+s+s2}{\PYGZdq{}Efficiency crystalline:\PYGZdq{}}\PYG{p}{,} \PYG{n}{eta\PYGZus{}c}\PYG{p}{)}
+
+
+\PYG{n}{ex1}\PYG{p}{()}
+\PYG{n}{ex2}\PYG{p}{()}
+\end{Verbatim}
