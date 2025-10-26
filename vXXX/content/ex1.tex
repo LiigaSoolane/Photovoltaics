@@ -1,33 +1,27 @@
 \section{Reflectance Measurements}
 \label{sec:Auswertung}
 
-As reflection plays an important role in the losses of solar cells, we measure the reflectiveness for different pv materials.  
+As reflection plays an important role in the losses of solar cells, we measure the absorption for different pv materials. This is 
+done by using a reflection chamber, in which all the light, which is not absorbed by the pv material, is reflected and measured.
+This data is shown in the first plot of \ref{fig:reflection}. The second plot shows the refractive index of the materials. As 
+one can easily see, the refractive index of the material depends heavily on the wavelength.
 
 \begin{figure}
   \centering
-  \includegraphics{reflection.pdf}
-  \caption{not absorbed light.}
+  \includegraphics[width=\textwidth]{reflections.pdf}
+  \caption{Reflected light of the different pv materials.}
   \label{fig:reflection}
 \end{figure}
 
-\begin{table}
-  \centering
-  \caption{Eine Beispieltabelle mit Messdaten.}
-  \label{tab:tabelle}
-  \sisetup{table-format=1.1, per-mode=reciprocal}
-  \begin{tblr}{
-      colspec = {S[table-format=3.0] S[table-format=2.1] S},
-      row{1} = {guard, mode=math},
-      vline{4} = {2}{-}{text=\clap{$\pm$}},
-    }
-    \toprule
-    U \mathbin{/} \unit{\volt} & I \mathbin{/} \unit{\micro\ampere} & \SetCell[c=2]{c} N \mathbin{/} \unit{\per\second} & \\
-    \midrule
-    360 & 0.1 & 98.3 & 0.9 \\
-    400 & 0.2 & 99.8 & 1.0 \\
-    420 & 0.2 & 99.1 & 0.9 \\
-    \bottomrule
-  \end{tblr}
-\end{table}
+In the first plot there is an oscillation-like behaviour of the reflection of the amorphous material. This is caused by 
+interference caused by the structure of the material. In thin films, light is reflected bothn on the surface and on the 
+back of a probe. With the light incoming normally, the optical path difference is equal to $2 n_2 d$, where $n_2$ is the 
+refractive index of the material and $d$ is the thickness of the material. With this, constructive interference occurs at multiples 
+of the wavelength $\lambda$.
+\begin{equation}
+  2 n_2 d = (m-\dfrac{1}{2})\lambda
+\end{equation}
+From this, the thickness of the material can be calculated. The factor 
 
-Siehe \autoref{fig:plot} und \autoref{tab:tabelle}!
+
+Siehe \autoref{fig:plot}!
