@@ -179,5 +179,109 @@ def ex2():
     print("Efficiency crystalline:", eta_c)
 
 
+
+class PrepData():
+    def __init__(self, filepath): 
+        # Filepath to the data file #
+        self.filepath = filepath     
+    
+    def Photons(self):
+        hbar = 6.64E-34
+        d = 0.004
+        c = 3E8
+
+        #Calculating the area of the incident beam #
+        area = np.pi * (d/2)**2
+
+        ## Reading data ##
+        self.data_ph = pd.read_csv('/Users/amithan/Photovoltaics/vXXX/data/QE_photons.txt', delimiter= ',', skiprows = [0,2], index_col=False)
+        self.data_ph.columns = self.data_ph.columns.str.strip()
+        # Preparing data #
+        self.data_ph['Photons'] = (self.data_ph["MeanValue[V]"] * area * self.data_ph["Wavelength[nm]"]) / (2878 * hbar * c)
+
+    def Silicon(self):
+        e = 1.61E-19
+        R = 1E4
+
+        # Reading data # 
+        self.data_Si = pd.read_csv(self.filepath, delimiter=',', skiprows= [0,2], index_col=False)
+        self.data_Si.columns = self.data_Si.columns.str.strip()
+        # Preparing Data #
+        self.data_Si['Pairs'] = (self.data_Si['MeanValue[V]'] / R) / e
+
+class ex3(PrepData):
+    def __init__(self, filepath):
+        super().__init__(filepath)
+        self.plotting_data = pd.DataFrame()
+
+
+    def CalculateQE(self, show=False):
+        self.Photons()
+        self.Silicon()
+        # Calculating QE #
+        self.plotting_data = pd.DataFrame()
+        self.plotting_data['Wavelength[nm]'] = self.data_ph['Wavelength[nm]']
+        self.plotting_data['Quantum Efficiency'] = (self.data_Si['Pairs'] )/(self.data_ph['Photons']) 
+
+        if show is True:
+            return self.plotting_data
+    
+    #def NormalisedQE(self):
+        #self.CalculateQE()
+
+        
+
+
+
+
+    def CreatePlot(self, x,y, ax = None,
+                   xlabel = 'X-axis',
+                   ylabel = 'Y-axis',
+                   title = 'Plot title',
+                   label = 'Data',
+                   color = 'b',
+                   linestyle = '-',
+                   linewidth = 2,
+                   show_grid = True):
+        if ax is None:
+            fig, ax = plt.subplots(figsize=(10,6))
+
+        ax.plot(x,y,
+                label=label,
+                color=color,
+                linestyle=linestyle,
+                linewidth=linewidth,
+                alpha=0.8
+                )
+        ax.set_xlabel(xlabel, fontsize = 12)
+        ax.set_ylabel(ylabel, fontsize = 12)
+        ax.set_title(title, fontsize = 14)
+
+        ax.legend(loc='best', fontsize = 12, frameon = True)
+
+        if show_grid is True:
+            ax.grid(True, linestyle='--', linewidth=0.5, alpha=0.7, color='gray')
+
 ex1()
 ex2()
+
+a_Silicon = ex3(filepath='/Users/amithan/Photovoltaics/vXXX/data/QE_aSi.txt')
+a_Silicon.CalculateQE()
+
+c_Silicon = ex3(filepath='/Users/amithan/Photovoltaics/vXXX/data/QE_cSi.txt')
+c_Silicon.CalculateQE()
+
+fig, axes = plt.subplots(1,2 , figsize = (10,4))
+
+a_Silicon.CreatePlot(a_Silicon.plotting_data['Wavelength[nm]'], a_Silicon.plotting_data['Quantum Efficiency'],ax=axes[0], 
+                     xlabel='Wavelength (nm)', 
+                     ylabel='Quantum Efficiency',
+                     title = 'Spectrum Dependent \n Quantum Efficiency \n of Amorphous Silicon',
+                     )
+
+c_Silicon.CreatePlot(c_Silicon.plotting_data['Wavelength[nm]'], c_Silicon.plotting_data['Quantum Efficiency'],ax=axes[1], 
+                     xlabel='Wavelength (nm)', 
+                     ylabel='Quantum Efficiency',
+                     title = 'Spectrum Dependent \n Quantum Efficiency \n of Crystalline Silicon',
+                     )      
+
