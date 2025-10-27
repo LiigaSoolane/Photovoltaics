@@ -187,9 +187,10 @@ def ex2():
 
 
 class PrepData():
-    def __init__(self, filepath): 
+    def __init__(self, material, filepath): 
         # Filepath to the data file #
-        self.filepath = filepath     
+        self.filepath = filepath   
+        self.material = material  
     
     def Photons(self):
         hbar = 6.64E-34
@@ -216,8 +217,8 @@ class PrepData():
         self.data_Si['Pairs'] = (self.data_Si['MeanValue[V]'] / R) / e
 
 class ex3(PrepData):
-    def __init__(self, filepath):
-        super().__init__(filepath)
+    def __init__(self, material, filepath):
+        super().__init__(material, filepath)
         self.plotting_data = pd.DataFrame()
 
 
@@ -232,9 +233,17 @@ class ex3(PrepData):
         if show is True:
             return self.plotting_data
     
-    #def NormalisedQE(self):
-        #self.CalculateQE()
+    def NormalisedQE(self):
+        self.CalculateQE()
+        # Normalising to the 
+        max_value = self.plotting_data['Quantum Efficiency'].max()
+        normalising_factor = 0.9/max_value 
 
+        self.plotting_dataN = pd.DataFrame()
+        self.plotting_dataN['Wavelength[nm]'] = self.plotting_data['Wavelength[nm]']
+        self.plotting_dataN['Quantum Efficiency'] = self.plotting_data['Quantum Efficiency'] * normalising_factor
+        
+        print(f'The Normalising factor for {self.material} Silicon is: {normalising_factor}')
         
 
 
@@ -271,24 +280,40 @@ class ex3(PrepData):
 ex1()
 ex2()
 
-def ex3():
-    a_Silicon = ex3(filepath='/Users/amithan/Photovoltaics/vXXX/data/QE_aSi.txt')
-    a_Silicon.CalculateQE()
 
-    c_Silicon = ex3(filepath='/Users/amithan/Photovoltaics/vXXX/data/QE_cSi.txt')
-    c_Silicon.CalculateQE()
+a_Silicon = ex3(material= "Amorphous", filepath='/Users/amithan/Photovoltaics/vXXX/data/QE_aSi.txt')
+a_Silicon.CalculateQE()
 
-    fig, axes = plt.subplots(1,2 , figsize = (10,4))
+c_Silicon = ex3(material= "Crystalline", filepath='/Users/amithan/Photovoltaics/vXXX/data/QE_cSi.txt')
+c_Silicon.CalculateQE()
 
-    a_Silicon.CreatePlot(a_Silicon.plotting_data['Wavelength[nm]'], a_Silicon.plotting_data['Quantum Efficiency'],ax=axes[0], 
+fig, axes = plt.subplots(1,2 , figsize = (10,4))
+
+a_Silicon.CreatePlot(a_Silicon.plotting_data['Wavelength[nm]'], a_Silicon.plotting_data['Quantum Efficiency'],ax=axes[0], 
                          xlabel='Wavelength (nm)', 
                          ylabel='Quantum Efficiency',
                          title = 'Spectrum Dependent \n Quantum Efficiency \n of Amorphous Silicon',
                          )
 
-    c_Silicon.CreatePlot(c_Silicon.plotting_data['Wavelength[nm]'], c_Silicon.plotting_data['Quantum Efficiency'],ax=axes[1], 
+c_Silicon.CreatePlot(c_Silicon.plotting_data['Wavelength[nm]'], c_Silicon.plotting_data['Quantum Efficiency'],ax=axes[1], 
                          xlabel='Wavelength (nm)', 
                          ylabel='Quantum Efficiency',
                          title = 'Spectrum Dependent \n Quantum Efficiency \n of Crystalline Silicon',
                          )      
 
+a_Silicon.NormalisedQE()
+c_Silicon.NormalisedQE()
+
+fig, axes = plt.subplots(1,2 , figsize = (10,4))
+
+a_Silicon.CreatePlot(a_Silicon.plotting_dataN['Wavelength[nm]'], a_Silicon.plotting_dataN['Quantum Efficiency'],ax=axes[0], 
+                     xlabel='Wavelength (nm)', 
+                     ylabel='Quantum Efficiency',
+                     title = 'Normalised Spectrum Dependent \n Quantum Efficiency \n of Amorphous Silicon',
+                     )
+
+c_Silicon.CreatePlot(c_Silicon.plotting_dataN['Wavelength[nm]'], c_Silicon.plotting_dataN['Quantum Efficiency'],ax=axes[1], 
+                     xlabel='Wavelength (nm)', 
+                     ylabel='Quantum Efficiency',
+                     title = 'Normalised Spectrum Dependent \n Quantum Efficiency \n of Crystalline Silicon',
+                     )
