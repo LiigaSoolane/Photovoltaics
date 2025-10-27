@@ -1,27 +1,41 @@
 \section{Reflectance Measurements}
 \label{sec:Auswertung}
 
+\subsection{Analysis}
 As reflection plays an important role in the losses of solar cells, we measure the absorption for different pv materials. This is 
-done by using a reflection chamber, in which all the light, which is not absorbed by the pv material, is reflected and measured.
-This data is shown in the first plot of \ref{fig:reflection}. The second plot shows the refractive index of the materials. As 
-one can easily see, the refractive index of the material depends heavily on the wavelength.
-
-\begin{figure}
+done by using a reflection chamber, in which all light is absorbed or reflected and measured.
+This data is shown in the first plot of \ref{fig:reflection}. It can be seen, that least light is adsorbed in the non-treated 
+material. For high wavelengths ($\lambda > 1000 \si{\nano\meter}$), the cristalline silicon with an pyramidal surface structure shows 
+the highest absorption. The black silicon shows much less absorption then expected, probably due to previous treatment during Fopras
+which damaged the nano-surface structure.
+\begin{figure}[h]
   \centering
   \includegraphics[width=\textwidth]{reflections.pdf}
   \caption{Reflected light of the different pv materials.}
   \label{fig:reflection}
 \end{figure}
-
-In the first plot there is an oscillation-like behaviour of the reflection of the amorphous material. This is caused by 
-interference caused by the structure of the material. In thin films, light is reflected bothn on the surface and on the 
+The main difference in the graphic is the oscillating behavior of the amorphous material in dependance of the wavelength. 
+This is probably caused by the different thickness of the material. The small layer thickness of the amorphous material leads 
+to interference of the light. In thin films, light is reflected both on the surface and on the 
 back of a probe. With the light incoming normally, the optical path difference is equal to $2 n_2 d$, where $n_2$ is the 
 refractive index of the material and $d$ is the thickness of the material. With this, constructive interference occurs at multiples 
 of the wavelength $\lambda$.
 \begin{equation}
   2 n_2 d = (m-\dfrac{1}{2})\lambda
 \end{equation}
-From this, the thickness of the material can be calculated. The factor 
+From this, the thickness of the material can be calculated. Doing that gives us two d
+
+The second plot shows the refractive index of the polished cristalline silicon. As 
+one can easily see, the refractive index of the material depends heavily on the wavelength.
+
+\subsection{Questions}
+\textbf{1. Why is the reflective loss for the rough silicon wafer side lower than for the polished side?}\\
+When the surface is roughened, the specular reflection is reduced. This is due to multiple reflections, that a reflection can happen into 
+another facet of the surface. Also, the textured surface creates just like for black silicon, but much less impactfull,
+a gradual transition from air (n ≈ 1) to silicon (n ≈ 3.5) due to the angled facets and partial filling of space. 
+
+\textbf{Why do the crystalline silicon samples show a local maximum at approx. $366 \si{\nano\meter}$}
 
 
-Siehe \autoref{fig:plot}!
+
+

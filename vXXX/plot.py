@@ -33,15 +33,21 @@ def ex1():
         ax1.plot(df[x_col], df[y_col], label=df.columns[i][0])
         
         reflection = (df[y_col]/100)**(1/2)
-        refractive_index = (1+reflection)/(1-reflection)
-        ax2.plot(df[x_col], refractive_index, label=df.columns[i][0])
+    
+    x_col = df.columns[0]
+    y_col = df.columns[1]
+        
+    reflection = (df[y_col]/100)**(1/2)
+    
+    refractive_index = (1+reflection)/(1-reflection)
+    ax2.plot(df[x_col], refractive_index, label=df.columns[i][0])
 
 
     # Achsenbeschriftungen, Legende etc.
     ax1.set_title("Reflection of several pv materials")
     ax1.set_ylabel(r"Reflection $[\si{\percent}]$")
     ax2.set_title("Refraction index of several pv materials")
-    ax2.set_xlabel(r"wavelength $[\si{\angstrom}]$")
+    ax2.set_xlabel(r"wavelength $[\si{\nano\meter}]$")
     ax2.set_ylabel(r"Refractive Index")
     ax1.legend(loc="upper right")
     ax2.legend(loc="upper right")
@@ -265,23 +271,24 @@ class ex3(PrepData):
 ex1()
 ex2()
 
-a_Silicon = ex3(filepath='/Users/amithan/Photovoltaics/vXXX/data/QE_aSi.txt')
-a_Silicon.CalculateQE()
+def ex3():
+    a_Silicon = ex3(filepath='/Users/amithan/Photovoltaics/vXXX/data/QE_aSi.txt')
+    a_Silicon.CalculateQE()
 
-c_Silicon = ex3(filepath='/Users/amithan/Photovoltaics/vXXX/data/QE_cSi.txt')
-c_Silicon.CalculateQE()
+    c_Silicon = ex3(filepath='/Users/amithan/Photovoltaics/vXXX/data/QE_cSi.txt')
+    c_Silicon.CalculateQE()
 
-fig, axes = plt.subplots(1,2 , figsize = (10,4))
+    fig, axes = plt.subplots(1,2 , figsize = (10,4))
 
-a_Silicon.CreatePlot(a_Silicon.plotting_data['Wavelength[nm]'], a_Silicon.plotting_data['Quantum Efficiency'],ax=axes[0], 
-                     xlabel='Wavelength (nm)', 
-                     ylabel='Quantum Efficiency',
-                     title = 'Spectrum Dependent \n Quantum Efficiency \n of Amorphous Silicon',
-                     )
+    a_Silicon.CreatePlot(a_Silicon.plotting_data['Wavelength[nm]'], a_Silicon.plotting_data['Quantum Efficiency'],ax=axes[0], 
+                         xlabel='Wavelength (nm)', 
+                         ylabel='Quantum Efficiency',
+                         title = 'Spectrum Dependent \n Quantum Efficiency \n of Amorphous Silicon',
+                         )
 
-c_Silicon.CreatePlot(c_Silicon.plotting_data['Wavelength[nm]'], c_Silicon.plotting_data['Quantum Efficiency'],ax=axes[1], 
-                     xlabel='Wavelength (nm)', 
-                     ylabel='Quantum Efficiency',
-                     title = 'Spectrum Dependent \n Quantum Efficiency \n of Crystalline Silicon',
-                     )      
+    c_Silicon.CreatePlot(c_Silicon.plotting_data['Wavelength[nm]'], c_Silicon.plotting_data['Quantum Efficiency'],ax=axes[1], 
+                         xlabel='Wavelength (nm)', 
+                         ylabel='Quantum Efficiency',
+                         title = 'Spectrum Dependent \n Quantum Efficiency \n of Crystalline Silicon',
+                         )      
 
