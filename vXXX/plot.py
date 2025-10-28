@@ -122,6 +122,24 @@ def ex2():
     U_c_light = c_light[:, 0]
     A_c_light = c_light[:, 1]
 
+    #get R_P and R_S
+    index_U_c_zero = np.argmin(np.abs(U_c_dark))
+    index_U_a_zero = np.argmin(np.abs(U_a_dark))
+    R_P_c = (U_c_dark[index_U_c_zero+1] - U_c_dark[index_U_c_zero-1])/(A_c_dark[index_U_c_zero+1] - A_c_dark[index_U_c_zero-1])
+    R_P_a = (U_a_dark[index_U_a_zero+1] - U_a_dark[index_U_a_zero-1])/(A_a_dark[index_U_a_zero+1] - A_a_dark[index_U_a_zero-1])
+    print("R_P_c:", R_P_c)
+    print("R_P_a:", R_P_a)
+
+    index_A_c_zero = np.argmin(np.abs(A_c_dark))
+    index_A_a_zero = np.argmin(np.abs(A_a_dark))
+    R_P_c = (U_c_dark[index_A_c_zero+1] - U_c_dark[index_A_c_zero-1])/(A_c_dark[index_A_c_zero+1] - A_c_dark[index_A_c_zero-1])
+    R_P_a = (U_a_dark[index_A_a_zero+1] - U_a_dark[index_A_a_zero-1])/(A_a_dark[index_A_a_zero+1] - A_a_dark[index_A_a_zero-1])
+    print("R_P_c:", R_P_c)
+    print("R_P_a:", R_P_a)
+
+    
+
+
     #plot the IU curve  
     fig1 = plt.figure()
     ax1 = fig1.add_subplot(1, 2, 1)
@@ -277,7 +295,7 @@ class ex3(PrepData):
         if show_grid is True:
             ax.grid(True, linestyle='--', linewidth=0.5, alpha=0.7, color='gray')
 
-ex1()
+#ex1()
 ex2()
 
 
