@@ -1,0 +1,48 @@
+\section{U-I Characteristics}
+\label{sec:UI}
+
+\subsection{Analysis}
+In the next part of the experiment, a $4 \times 4 \si{\milli\meter}$ square of polished cristalline silicon and 
+a $4 \times 4 \si{\milli\meter}$ square of amorphous silicon are connected to a voltage. First measurements are
+made without any influx of light; then a measurement with exactly $ 1 \si{\milli\watt\per\meter}$ of light is made.
+The results are shown in figure \ref{fig:UI}.\\
+\begin{figure}[h]
+  \centering
+  \includegraphics[width=\textwidth]{UI.pdf}
+  \caption{U-I characteristics of the different pv materials.}
+  \label{fig:UI}
+\end{figure}
+The serial resistance (R) and the parallel resistance (R) are determined by the dark current measurements.
+
+
+The Open Circuit Voltage (OCV) is the voltage at which the current is zero. In our case this is at 
+$U_{OCV} = 0.5 \si{\volt}$ for crystalline silicon and $U_{OCV} = 0.83 \si{\volt}$ for amorphous silicon.\\
+The short circuit current is the current for an external voltage of zero. In our case this is at 
+$I_{SC} = -6.709277 \cdotp 10^{-3} \si{\milli\ampere}$ for crystalline silicon and $I_{SC} = -6.97 \cdot 10^{-4} \si{\milli\ampere}$ for amorphous silicon.\\
+The Fill Factor (FF) is determined by the following ratio:
+\begin{align}
+  FF = \dfrac{P_{max}}{I_{SC} \cdot U_{OCV}}
+\end{align}
+where $P_{max}$ is the maximum power, which is determined maximizing the product of $I(U)$ and $U$. For the probes
+we get 
+\begin{align}
+  FF_crystalline = 0.6230232825384912
+  FF_amorphous = 0.6469393085510289
+\end{align}
+Fromthe same data we get the efficiency:
+\begin{align}
+  \eta_crystalline = \dfrac{P_{max}}{P_{light}} = 0.131
+  \eta_amorphous = 0.023
+\end{align}
+
+\subsection{Questions}
+\textbf{1. How can the serial and parallel resistances be calculated from the dark current characteristics?}\\
+
+\textbf{2. The manufacturer of the crystallin solar cell specifies more than $10^{5} \si{\ohm}$ for the parallel 
+resistance $R_p$. Why is the measured value much smaller?}\\
+
+\textbf{3. What are the main sources of error in calculating the efficiency?}\\
+
+\textbf{4. Why are the open-circuit voltages and the short-circuit currents of the crystalline and amorphous 
+silicon solar cells so different at constant illumination?}\\
+weil baum
