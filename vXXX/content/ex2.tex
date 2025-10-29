@@ -45,8 +45,14 @@ Fromthe same data we get the efficiency:
 
 \subsection{Questions}
 \textbf{1. How can the serial and parallel resistances be calculated from the dark current characteristics?}\\
-
-
+From the equivalent Ciruit Model of a Real Solar Cell, discussed in the description of the experiment, we get:
+\begin{align*}
+  I = I_S (\exp (q(U-IR_S)/AkT) - 1) -I_L + (U -IR_S)/R_P\\
+  \Rightarrow \dfrac{\delta I}{\delta U} = \dfrac{q}{AkT} \cdot (\exp (q(U-IR_S)/AkT) - 1) - \dfrac{1}{R_P} \\
+  \text{for} U \rightarrow 0 \Rightarrow \dfrac{\delta I}{\delta U} \rightarrow \dfrac{1}{R_p} \\
+  \Leftrightarrow R_p = {\dfrac{\delta U}{\delta I}}|_{V = 0}\\
+  \text{for} I \leftarrow 0 \Leftarrow \dfrac{\del I}{\del U} \leftarrow \dfrac{1}{R_p} \\
+\end{align*}
 
 \textbf{2. The manufacturer of the crystallin solar cell specifies more than $10^{5} \si{\ohm}$ for the parallel 
 resistance $R_p$. Why is the measured value much smaller?}\\
