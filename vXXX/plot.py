@@ -244,7 +244,7 @@ class PrepData():
         area = np.pi * (d/2)**2
 
         ## Reading data ##
-        self.data_ph = pd.read_csv('/Users/amithan/Photovoltaics/vXXX/data/QE_photons.txt', delimiter= ',', skiprows = [0,2], index_col=False)
+        self.data_ph = pd.read_csv('vXXX/data/QE_photons.txt', delimiter= ',', skiprows = [0,2], index_col=False)
         self.data_ph.columns = self.data_ph.columns.str.strip()
         # Preparing data #
         self.data_ph['Photons'] = (self.data_ph["MeanValue[V]"] * area * self.data_ph["Wavelength[nm]"]) / (2878 * hbar * c)
@@ -287,9 +287,30 @@ class ex3(PrepData):
         self.plotting_dataN['Quantum Efficiency'] = self.plotting_data['Quantum Efficiency'] * normalising_factor
         
         print(f'The Normalising factor for {self.material} Silicon is: {normalising_factor}')
+
+    def CalculateSCCurrent(self):
+        self.CalculateQE()
+        # Usefull Constants #
+        d = 0.004
+        A = np.pi * (d**2) / 4
+        e = 1.61E-19
+        del_lam = 20
+        h = 6.64E-34
+        c = 3E8
+
+        # Reading the Solar Spectrum data #
+        Spectrum_data = pd.read_csv("vXXX/data/AM1SolarSpectrum.txt", delimiter=' ')
+
+        Spectrum_data['Short Circuit'] = (self.plotting_data['Quantum Efficiency'] *
+                                          Spectrum_data['spectral power density (mW/cm2.nm)'] *
+                                          Spectrum_data['wavelength (nm)'] * 10E-9 *
+                                          del_lam
+                                          ) / (h * c)
+        ShortCircuit_Current = Spectrum_data['Short Circuit'].sum() * e * A
+
+        print(f'The Short Circuit current for {self.material} Silicon is: {(ShortCircuit_Current * 1000):.2f} mA')
+
         
-
-
 
 
     def CreatePlot(self, x,y, ax = None,
@@ -345,8 +366,8 @@ c_Silicon.CreatePlot(c_Silicon.plotting_data['Wavelength[nm]'], c_Silicon.plotti
                          title = 'Spectrum Dependent \n Quantum Efficiency \n of Crystalline Silicon',
                          )      
 
-a_Silicon.NormalisedQE()
-c_Silicon.NormalisedQE()
+a_Silicon.CalculateSCCurrent()
+c_Silicon.CalculateSCCurrent()
 
 fig, axes = plt.subplots(1,2 , figsize = (10,4))
 
