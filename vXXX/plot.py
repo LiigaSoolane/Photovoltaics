@@ -6,15 +6,14 @@ from scipy.signal import find_peaks
 import numpy as np
 from scipy.optimize import curve_fit
 
+from scipy.optimize import minimize
+
 
 #mpl.rcParams.update({
 #    "text.usetex": True,
 #    "pgf.texsystem": "lualatex",  # zwingt lualatex
 #    "pgf.preamble": r"\usepackage{siunitx}"
 #})
-
-def reffunc(index, m, d):
-    return (2*d/(m - index))
 
 
 def ex1():
@@ -69,32 +68,58 @@ def ex1():
 
     print("x-values of maxima:", x_col.iloc[peaks])
 
-    reflection = (pd.to_numeric(df.iloc[:, 1], errors='coerce')/ 100)**0.5
-    refractive_index = (1 + reflection) / (1 - reflection)
+    index = np.linspace(0, 9, len(peaks)) +0.5
 
-    index = np.linspace(0,9, 10)
-    print(index)
-    y = x_col[peaks] / refractive_index[peaks]
+    # Objective: minimize mean squared error
+    def objective(params):
+        mn, d = params
+        y_pred = x_col[peaks] * (mn + index) / (2 * d)
+        return np.mean((y_col[peaks] - y_pred)**2)
     
-    m = 9.5
+    # We'll do a brute-force integer search over mn, and continuous optimization for d
+    best_result = None
+    best_mn = None
     best_d = None
-    best_error = np.inf
+    best_loss = np.inf
 
-    def model_d(x, d):
-        return reffunc(x, 10, d)
+    for mn_candidate in range(-100, 101):  # Adjust search range as needed
+        res = minimize(lambda d: objective([mn_candidate, d[0]]), x0=[1.0], bounds=[(1e-6, None)])
+        if res.fun < best_loss:
+            best_loss = res.fun
+            best_result = res
+            best_mn = mn_candidate
+            best_d = res.x[0]
+    print(best_d, best_mn)
 
-    popt, _ = curve_fit(model_d, index, y)
-    best_d = popt[0]
 
-    d = (m-index)/refractive_index[peaks] * x_col[peaks] / 2
-    print(np.mean(d))
+    #index = np.linspace(1,10, 10)
+    #y = x_col[peaks] / refractive_index[peaks]
+    #
+    #m = 2.5
+    #best_d = None
+    #best_error = np.inf
+
+    #def reffunc(x, mn, d):
+    #    return x*mn/(2*d)
+
+    #def model_d(x, d):
+    #    return reffunc(x, m+index, d)
+
+    #popt, _ = curve_fit(model_d, x_col[peaks], y_col[peaks])
+    #best_d = popt[0]
+
+    d = (best_mn+index)*x_col[peaks] /(refractive_index[peaks] * 2)
+    #print(np.mean(d))
 
     
     fig1, ax3 = plt.subplots(1, 1) 
-    plt.plot(x_col[peaks], best_d*2*refractive_index[peaks]/(m-index), label="fit_best")
-    plt.plot(x_col[peaks], np.mean(d)*2*refractive_index[peaks]/(m-index), label="fit_mean")
-    plt.plot(x_col[peaks], x_col[peaks], label="data")
+    plt.plot(x_col[peaks], np.zeros(len(peaks)) + best_d, label="fit_best")
+    plt.plot(x_col[peaks], np.zeros(len(peaks)) + np.mean(d), label="fit_mean")
+    plt.plot(x_col[peaks], d, label="data")
     plt.savefig("build/fit.pdf")
+    plt.legend()
+    plt.xlabel(r"wavelength $[\si{\nano\meter}]$")
+    plt.ylabel(r"thickness $[\si{\nano\meter}]$")
     print("Optimal m:", 10)
     print("Optimal d:", best_d)
 
@@ -295,9 +320,10 @@ class ex3(PrepData):
         if show_grid is True:
             ax.grid(True, linestyle='--', linewidth=0.5, alpha=0.7, color='gray')
 
-#ex1()
+ex1()
 ex2()
 
+quit()
 
 a_Silicon = ex3(material= "Amorphous", filepath='/Users/amithan/Photovoltaics/vXXX/data/QE_aSi.txt')
 a_Silicon.CalculateQE()
