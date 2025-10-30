@@ -12,12 +12,7 @@ therefore $\Delta E \approx 1.12 \si{\electronvolt}$, which corresponds to $\lam
 It can be seen, that least light is adsorbed in the non-treated material. For high wavelengths ($\lambda > 1000 \si{\nano\meter}$), 
 the cristalline silicon with an pyramidal surface structure shows the highest absorption. The black silicon shows much less 
 absorption then expected, probably due to previous treatment during Fopras, which damaged the nano-surface structure.
-\begin{figure}[H]
-  \centering
-  \includegraphics[width=\textwidth]{reflections.pdf}
-  \caption{Reflected light of the different pv materials.}
-  \label{fig:reflection}
-\end{figure}
+
 The main difference in the graphic is the oscillating behavior of the amorphous material in dependance of the wavelength. 
 This is probably caused by the different thickness of the material. The small layer thickness of the amorphous material leads 
 to interference of the light. In thin films, light is reflected both on the surface and on the 
@@ -29,7 +24,19 @@ of the wavelength $\lambda$.
 \end{equation}
 The addition of $\dfrac{1}{2}$ is due to a phase shift of the reflected light on the surface of the material. This is caused because 
 of the refractive index of the amorphous material is higher than the refractive index of the air.
-From this, the thickness of the material can be calculated. 
+From this, the thickness of the material can be calculated. We have several peaks, where we could get the thickness of the material; we 
+also don't know at what m we start. Therefore, we used a minimization of the function $(n_i - n_{calculated for m})^2$ for each peak.
+This gives us 
+\begin{equation*}
+  d = 89.450 \si{\nano\meter}
+\end{equation*}
+for the peak at $\lambda = 1697 \si{\nano\meter}$ being $m = 10$
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=\textwidth]{reflections.pdf}
+  \caption{Reflected light of the different pv materials.}
+  \label{fig:reflection}
+\end{figure}
 
 \subsection{Questions}
 \textbf{1. Why is the reflective loss for the rough silicon wafer side lower than for the polished side?}\\

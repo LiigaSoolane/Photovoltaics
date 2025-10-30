@@ -68,7 +68,7 @@ def ex1():
 
     print("x-values of maxima:", x_col.iloc[peaks])
 
-    index = np.linspace(0, 9, len(peaks)) +0.5
+    index = np.linspace(0, 9, len(peaks)) + 0.5
 
     # Objective: minimize mean squared error
     def objective(params):
@@ -155,8 +155,8 @@ def ex2():
     print("R_P_c:", R_P_c)
     print("R_P_a:", R_P_a)
 
-    index_A_c_zero = np.argmin(np.abs(A_c_dark))
-    index_A_a_zero = np.argmin(np.abs(A_a_dark))
+    index_A_c_zero = np.argmin(np.abs(A_c_light))
+    index_A_a_zero = np.argmin(np.abs(A_a_light))
     R_P_c = (U_c_dark[index_A_c_zero+1] - U_c_dark[index_A_c_zero-1])/(A_c_dark[index_A_c_zero+1] - A_c_dark[index_A_c_zero-1])
     R_P_a = (U_a_dark[index_A_a_zero+1] - U_a_dark[index_A_a_zero-1])/(A_a_dark[index_A_a_zero+1] - A_a_dark[index_A_a_zero-1])
     print("R_P_c:", R_P_c)

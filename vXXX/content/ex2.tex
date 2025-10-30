@@ -12,16 +12,16 @@ The results are shown in figure \ref{fig:UI}.\\
   \caption{U-I characteristics of the different pv materials.}
   \label{fig:UI}
 \end{figure}
-The serial resistance (R) and the parallel resistance (R) are determined by the dark current measurements.
+The serial resistance (R) and the parallel resistance (R) can be determined by the dark current measurements.
 A fit through the dark current for voltages near 0 is done; resulting in the following values for $R_p$ and $R_s$:
 \begin{align*}
-  R_{p, crystalline} \approx \dfrac{\del U}{\del I} |_{U = 0} = 4.109 \cdot 10^{3} \si{\ohm}\\
-  R_{s, crystalline} \approx \dfrac{\del U}{\del I} |_{I = 0} = 4.109 \cdot 10^{3} \si{\ohm}\\
-  R_{p, amorphous} \approx \dfrac{\del U}{\del I} |_{U = 0} = 7.084 \cdot 10^{7} \si{\ohm}\\
-  R_{s, amorphous} \approx \dfrac{\del U}{\del I} |_{I = 0} = 2.111 \cdot 10^{7} \si{\ohm}
+  R_{p, crystalline} \approx \dfrac{\del U}{\del I} |_{U_{dark} = 0} = 4.109 \cdot 10^{3} \si{\ohm}\\
+  R_{s, crystalline} \approx \dfrac{\del U}{\del I} |_{I_{light} = 0} = 13.66 \si{\ohm}\\
+  R_{p, amorphous} \approx \dfrac{\del U}{\del I} |_{U_{dark} = 0} = 7.084 \cdot 10^{7} \si{\ohm}\\
+  R_{s, amorphous} \approx \dfrac{\del U}{\del I} |_{I_{light} = 0} = 260.38 \si{\ohm}
 \end{align*}
-Interestingly for the crystalline silicon cell, the point, where the dark current is zero is at the exact same 
-point, where the voltage is zero. Therefore, parallel and serial resistance are equal.
+For the serial resistance the derivative at a high voltage in needed. Therefore we use the data of the point
+of the $U_ocv$.\\
 
 The Open Circuit Voltage (OCV) is the voltage at which the current is zero. In our case this is at 
 $U_{OCV} = 0.5 \si{\volt}$ for crystalline silicon and $U_{OCV} = 0.83 \si{\volt}$ for amorphous silicon.\\
@@ -47,17 +47,33 @@ Fromthe same data we get the efficiency:
 \textbf{1. How can the serial and parallel resistances be calculated from the dark current characteristics?}\\
 From the equivalent Ciruit Model of a Real Solar Cell, discussed in the description of the experiment, we get:
 \begin{align*}
-  I = I_S (\exp (q(U-IR_S)/AkT) - 1) -I_L + (U -IR_S)/R_P\\
-  \Rightarrow \dfrac{\delta I}{\delta U} = \dfrac{q}{AkT} \cdot (\exp (q(U-IR_S)/AkT) - 1) - \dfrac{1}{R_P} \\
-  \text{for} U \rightarrow 0 \Rightarrow \dfrac{\delta I}{\delta U} \rightarrow \dfrac{1}{R_p} \\
-  \Leftrightarrow R_p = {\dfrac{\delta U}{\delta I}}|_{V = 0}\\
-  \text{for} I \leftarrow 0 \Leftarrow \dfrac{\del I}{\del U} \leftarrow \dfrac{1}{R_p} \\
+  I = I_S (\exp (q(U-IR_S)/AkT) - 1) -I_L + (U -IR_S)/R_P
+\end{align*}
+For small Voltages, the first term is close to $0$, therefore we can neglect it. Then we get:
+\begin{equation*}
+  R_p = {\dfrac{\partial U}{\partial I}}|_{V = 0}
+\end{equation*}
+For high VOltages, the exponential term is much higher, therefor we can neglect the second term. We get
+\begin{align*}
+  R_s = {\dfrac{\partial U}{\partial I}}|_{high V}
 \end{align*}
 
 \textbf{2. The manufacturer of the crystallin solar cell specifies more than $10^{5} \si{\ohm}$ for the parallel 
 resistance $R_p$. Why is the measured value much smaller?}\\
+Probe insulation, socket leakage, meter input leakage, bench wiring, humidity, or flux/residue on the cell surface 
+create extra leakage paths that reduce the measured resistance.
 
 \textbf{3. What are the main sources of error in calculating the efficiency?}\\
+The main sources of error in calculating the efficiency come from inaccuracies in measuring the 
+I-V characteristics, the incident light power, and the active cell area. In our experimental setup,
+the most significant source of error is active cell area, which ia also influenced by the casing. Another 
+point of error stems from the fact, that the lamp used for the measurements is, in fact, not a perfect 
+representation of the sun.
 
 \textbf{4. Why are the open-circuit voltages and the short-circuit currents of the crystalline and amorphous 
 silicon solar cells so different at constant illumination?}\\
+Crystalline silicon has a highly ordered structure with long carrier lifetimes and low defect densities, 
+leading to higher $V_{oc}$, while amorphous silicon has many defects and localized states that cause strong 
+recombination, reducing $V_{oc}$. However, amorphous silicon has a higher optical absorption coefficient, 
+so it can generate more current in thin layers, often giving it a higher $I_{sc}$ per thickness even though its 
+$V_{oc}$ is lower.
