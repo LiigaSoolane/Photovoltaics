@@ -1,0 +1,77 @@
+\section{Qunatum Efficiency Measurements}
+\label{sec:Auswertung}
+
+\subsection{Analysis}
+Qunatum Efficiency (QE) of a Photovoltaic cell is defined as the ratio of the number of electron-hole pairs
+created by the inceident light and the number of photons incident on the solar cell. The objective 
+of the experiment was to estimate the spectral quantum efficiency, i.e., the wavelength dependant quantum
+efficiency of different types of solar cells. 
+\\
+
+The measurement setup consisted of pyrodetector and samples. These are illuminated with light of a specific wavelength. With the use of monochromators and filters 
+the wavelength is varied from $350~\si{\nano\meter}$ to $1150~\si{\nano\meter}$. To measure QE, two of the subsequent measurements are made:
+\begin{itemize}
+    \item A pyroelectric detector is used to determine the intensity of the light. This gives us the number of photons. 
+    The pyrodetector delivers a voltage of $2878~\si{\volt}$ per $1~\si{\watt}$ of irradiated light.
+    \item The pyroelectric detector is replaced by the solar cell and the photocurrent pro- vides information about the number of generated electron hole pairs.
+\end{itemize}
+
+To calculate QE from the measured values, a simple calculation to get the number of photons and the number of electron-hole pairs, needs to made. 
+This calculation can be carried out by using, 
+\begin{align*}
+   N_{e-h} = \frac{I_{pc}t}{e} \\ 
+   N_p = \frac{VAt \lambda}{2878 hc} \\ 
+   QE = \frac{N_{e-h}}{N_p}
+\end{align*}
+where $N_{e-h}$ is the number of electron-hole pairs, $N_p$ is the number of photons, V is the measured voltage, $I_{pc}$ is the induced photocurrent
+$A$ is the illuminated area, $e$ is the charge of the electron, $\lambda$ is the wavelength and $c$ is the speed of light. 
+Fig \ref{fig:QE}, is the plot of calculated QE, for the various wavelengths. This by itself is not representative of the context of solar cells outside 
+of the lab. To obtain this value, we normalise this plot to the value of $0.9$ for the wavelengths $300 < \lambda < 900$. 
+Fig \ref{fig:NormalisedQE} represents the normalised curve, for the selected wavelengths. 
+\begin{itemize}
+\item The normalising factor for amorphous silicon is $27021.06$.
+\item The normalising factor for crystalline silicon is $31978.62$.
+\end{itemize}
+
+As the final part of the analysis, we try to estimate the short circuit current expected for a solar spectrum for AM1.
+This is done by using the following equation,
+\begin{align*}
+    I_{SC} = Aq\sum \frac{QE \cdot S(\lambda) \cdot \lambda \Delta\lambda}{hc}
+\end{align*}
+
+The short circuit current calculated by using the above equation for 
+
+\begin{itemize}
+\item Amorphous silicon is $1.88~\si{\milli\ampere}$
+\item Crystalline silicon is $3.81~\si{\milli\ampere}$
+\end{itemize}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\textwidth]{build/QE_Plots.pdf}
+    \caption{Spectrum dependant Qunatum Efficiency}
+    \label{fig:QE}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\textwidth]{build/QE_NormalisePlots.pdf}
+    \caption{Normalised Spectrum dependant Qunatum Efficiency}
+    \label{fig:NormalisedQE}
+\end{figure}
+
+
+\subsection{Questions}
+\textbf{1. Why does the quantum efficiency of the different cells drop to zero at 300 nm (different reasons for c-Si and a-Si solar cells)?}
+Both a-Si and c-Si have different reason why the quantum efficiency drops to zero at $300\si{\nano\meter}$. 
+For a-Si, the material has a short absorbtion depth for wavelengths in the specified range. This leads to all the photons being absorbed within the first few nanometers. However this regions sufffers from very 
+poor electronic quality due to defects. This leads to high recombination losses that leads to the zero QE. 
+
+For c-Si, on the other hand, the photons are all absorbed in the front layers of the cell, specifically near the anti-reflection coating, these layers are extremely close to the surface and not well-suited for efficient carrier collection.
+So the created pairs suffer recombination losses before they reach the p-n junction. This prevents these pairs from contributing to the produced current. 
+
+\textbf{Is there a correlation between the decrease of the quantum efficiency near the band edge and the the type of band gap of the absorber material?}
+Yes there is a correlation between the decrease in the quantum efficiency near the band gap and the type of band gap.
+In direct band gap materials, the absorption edge is sharp because photons can be absorbed directly without needing any momentum change; this means electron–hole pairs are created efficiently right at the band gap energy.
+In indirect band gap materials, photon absorption near the band edge is much less efficient because it requires the involvement of a phonon to conserve momentum. This causes a much more gradual onset of absorption as photon energy approaches the band gap.
+The result is a more gradual decrease in quantum efficiency near the cutoff

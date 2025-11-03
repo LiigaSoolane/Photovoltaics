@@ -321,7 +321,8 @@ class ex3(PrepData):
                    color = 'b',
                    linestyle = '-',
                    linewidth = 2,
-                   show_grid = True):
+                   show_grid = True,
+                   scaled=False):
         if ax is None:
             fig, ax = plt.subplots(figsize=(10,6))
 
@@ -340,6 +341,8 @@ class ex3(PrepData):
 
         if show_grid is True:
             ax.grid(True, linestyle='--', linewidth=0.5, alpha=0.7, color='gray')
+        if scaled is True:
+            ax.set_xlim(450,900)
 
 ex1()
 ex2()
@@ -377,12 +380,14 @@ a_Silicon.CreatePlot(a_Silicon.plotting_dataN['Wavelength[nm]'], a_Silicon.plott
                      xlabel='Wavelength (nm)', 
                      ylabel='Quantum Efficiency',
                      title = 'Normalised Spectrum Dependent \n Quantum Efficiency \n of Amorphous Silicon',
+                     scaled=True
                      )
 
 c_Silicon.CreatePlot(c_Silicon.plotting_dataN['Wavelength[nm]'], c_Silicon.plotting_dataN['Quantum Efficiency'],ax=axes[1], 
                      xlabel='Wavelength (nm)', 
                      ylabel='Quantum Efficiency',
                      title = 'Normalised Spectrum Dependent \n Quantum Efficiency \n of Crystalline Silicon',
+                     scaled=True
                      )
 plt.tight_layout()
 plt.savefig('build/QE_NormalisePlots.pdf')
