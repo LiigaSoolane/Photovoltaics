@@ -24,19 +24,15 @@ of the wavelength $\lambda$.
 \end{equation}
 The addition of $\dfrac{1}{2}$ is due to a phase shift of the reflected light on the surface of the material. This is caused because 
 of the refractive index of the amorphous material is higher than the refractive index of the air.
-From this, the thickness of the material can be calculated. We have several peaks, where we could get the thickness of the material; we 
-also don't know at what m we start. Therefore, we used a minimization of the function $(n_i - n_{calculated for m})^2$ for each peak.
-This gives us 
+Because we don't know, at what m we start, we can compare two peaks lying next to each other. 
+\begin{align*}
+  \dfrac{2 n_2(\lambda_1) d}{\lambda_1} + \dfrac{1}{2} - \dfrac{2 n_2(\lambda_2) d}{\lambda_2} + \dfrac{1}{2} &= m - (m-1) = 1 \\
+  \Leftrightarrow d &= \dfrac{\lambda_1 \lambda_2}{2 (n_2(\lambda_1) \lambda_2 - (n_2(\lambda_1) - \lambda_2))}
+\end{align*}
+This gives us
 \begin{equation*}
-  d = 89.450 \si{\nano\meter}
+  d = 200.43 \si{\nano\meter}.
 \end{equation*}
-for the peak at $\lambda = 1697 \si{\nano\meter}$ being $m = 10$
-\begin{figure}[H]
-  \centering
-  \includegraphics[width=\textwidth]{reflections.pdf}
-  \caption{Reflected light of the different pv materials.}
-  \label{fig:reflection}
-\end{figure}
 
 \subsection{Questions}
 \textbf{1. Why is the reflective loss for the rough silicon wafer side lower than for the polished side?}\\

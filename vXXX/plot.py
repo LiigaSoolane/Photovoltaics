@@ -68,6 +68,15 @@ def ex1():
 
     print("x-values of maxima:", x_col.iloc[peaks])
 
+    d = np.zeros(len(peaks)-1)
+
+    for i in range(len(peaks)-1):
+        d[i] = x_col[peaks[i+1]] * x_col[peaks[i]] / (2 * (- refractive_index[peaks[i]] * x_col[peaks[i+1]] + refractive_index[peaks[i+1]] * x_col[peaks[i]]))
+    
+    print("d-values:", d)
+    
+    
+    
     index = np.linspace(0, 9, len(peaks)) + 0.5
 
     # Objective: minimize mean squared error
