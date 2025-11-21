@@ -326,8 +326,6 @@ class ex3(PrepData):
                    xlabel = 'X-axis',
                    ylabel = 'Y-axis',
                    title = 'Plot title',
-                   label = 'Data',
-                   color = 'b',
                    linestyle = '-',
                    linewidth = 2,
                    show_grid = True,
@@ -335,13 +333,14 @@ class ex3(PrepData):
         if ax is None:
             fig, ax = plt.subplots(figsize=(10,6))
 
-        ax.plot(x,y,
-                label=label,
-                color=color,
-                linestyle=linestyle,
-                linewidth=linewidth,
-                alpha=0.8
-                )
+        labels = ["Amorphous", "Crystalline"]
+        for i in range(0,2):
+            ax.plot(x,y[i],
+                    label=labels[i],
+                    linestyle=linestyle,
+                    linewidth=linewidth,
+                    alpha=0.8
+                    )
         ax.set_xlabel(xlabel, fontsize = 12)
         ax.set_ylabel(ylabel, fontsize = 12)
         ax.set_title(title, fontsize = 14)
@@ -363,40 +362,25 @@ a_Silicon.CalculateQE()
 c_Silicon = ex3(material= "Crystalline", filepath='data/QE_cSi.txt')
 c_Silicon.CalculateQE()
 
-fig, axes = plt.subplots(1,2 , figsize = (10,4))
 
-a_Silicon.CreatePlot(a_Silicon.plotting_data['Wavelength[nm]'], a_Silicon.plotting_data['Quantum Efficiency'],ax=axes[0], 
+a_Silicon.CreatePlot(a_Silicon.plotting_data['Wavelength[nm]'], [a_Silicon.plotting_data['Quantum Efficiency'],c_Silicon.plotting_data['Quantum Efficiency']], 
                          xlabel='Wavelength (nm)', 
                          ylabel='Quantum Efficiency',
-                         title = 'Spectrum Dependent \n Quantum Efficiency \n of Amorphous Silicon',
+                         title = 'Spectrum Dependent \n Quantum Efficiency',
                          )
 
-c_Silicon.CreatePlot(c_Silicon.plotting_data['Wavelength[nm]'], c_Silicon.plotting_data['Quantum Efficiency'],ax=axes[1], 
-                         xlabel='Wavelength (nm)', 
-                         ylabel='Quantum Efficiency',
-                         title = 'Spectrum Dependent \n Quantum Efficiency \n of Crystalline Silicon',
-                         )  
 
-plt.tight_layout()  
+plt.show()
 plt.savefig('build/QE_Plots.pdf')  
 
 a_Silicon.CalculateSCCurrent()
 c_Silicon.CalculateSCCurrent()
 
-fig, axes = plt.subplots(1,2 , figsize = (10,4))
-
-a_Silicon.CreatePlot(a_Silicon.plotting_dataN['Wavelength[nm]'], a_Silicon.plotting_dataN['Quantum Efficiency'],ax=axes[0], 
+a_Silicon.CreatePlot(a_Silicon.plotting_dataN['Wavelength[nm]'], [a_Silicon.plotting_dataN['Quantum Efficiency'], c_Silicon.plotting_dataN['Quantum Efficiency']],
                      xlabel='Wavelength (nm)', 
                      ylabel='Quantum Efficiency',
-                     title = 'Normalised Spectrum Dependent \n Quantum Efficiency \n of Amorphous Silicon',
-                     scaled=True
+                     title = 'Normalised Spectrum Dependent \n Quantum Efficiency',
                      )
 
-c_Silicon.CreatePlot(c_Silicon.plotting_dataN['Wavelength[nm]'], c_Silicon.plotting_dataN['Quantum Efficiency'],ax=axes[1], 
-                     xlabel='Wavelength (nm)', 
-                     ylabel='Quantum Efficiency',
-                     title = 'Normalised Spectrum Dependent \n Quantum Efficiency \n of Crystalline Silicon',
-                     scaled=True
-                     )
-plt.tight_layout()
+plt.show()
 plt.savefig('build/QE_NormalisePlots.pdf')
